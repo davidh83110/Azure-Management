@@ -1,4 +1,4 @@
-# Azure VM manage by code
+# Azure VM management by code
 
 Deallocate:
 
