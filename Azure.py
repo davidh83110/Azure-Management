@@ -90,13 +90,13 @@ def azure_changeIP():
 if __name__ == '__main__':
 
     # Azure account & password
-    az_account = 'xxxxxxx@payeasy.com.tw'
-    az_password = 'xxxxxxx'
+    az_account = 'xxxxx@payeasy.com.tw'
+    az_password = 'xxxxx'
 
     # Azure resource group & vm name
     resource_group = 'Payeasy_Docker_Services'
     vm_name = 'Docker-Services'
 
-    azure_changeIP()
-    # get_status()
+    # azure_changeIP()
+    get_status()
 
