@@ -57,14 +57,19 @@ def azure_login():
 
 
 # Azure server status
-def get_status():
 
-    cmd_get_status = 'az vm get-instance-view -g {} -n {}'.format(resource_group, vm_name)
+def get_status(status):
 
-    result = exec_command(cmd_get_status)
-    status = result.get('instanceView').get('statuses')[1].get('displayStatus')
+    if status == 'status':
+        cmd = 'az vm get-instance-view -g {} -n {}'.format(resource_group, vm_name)
+        result = exec_command(cmd)
+        status = result.get('instanceView').get('statuses')[1].get('displayStatus')
+    if status == 'ip':
+        cmd = 'az vm list-ip-addresses -g {} -n {}'.format(resource_group, vm_name)
+        result = exec_command(cmd)
+        status = result[0].get('virtualMachine').get('network').get('publicIpAddresses')[0].get('ipAddress')
 
-    print(status)
+    return status
 
 
 def azure_changeIP():
@@ -78,7 +83,8 @@ def azure_changeIP():
         if result.get('status') == 'Succeeded':
             result = exec_command(cmd_start)
             if result.get('status') == 'Succeeded':
-                print('reboot succeeded !')
+                ip = get_status('ip')
+                print('reboot succeeded ! IP : {}'.format(ip))
             else:
                 print('reboot failed !')
         else:
@@ -90,13 +96,13 @@ def azure_changeIP():
 if __name__ == '__main__':
 
     # Azure account & password
-    az_account = 'xxxxx@payeasy.com.tw'
-    az_password = 'xxxxx'
+    az_account = 'xxx@payeasy.com.tw'
+    az_password = 'xxx'
 
     # Azure resource group & vm name
     resource_group = 'Payeasy_Docker_Services'
     vm_name = 'Docker-Services'
 
     # azure_changeIP()
-    get_status()
+    get_status('ip')
 
