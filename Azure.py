@@ -4,6 +4,7 @@
 import sys
 import subprocess
 import json
+import PEZ_MAIL
 # import time
 
 
@@ -73,6 +74,7 @@ def get_status(status):
 
 
 def azure_changeIP():
+
     cmd_deallocate = 'az vm deallocate -g {} -n {}'.format(resource_group, vm_name)
     cmd_start = 'az vm start -g {} -n {}'.format(resource_group, vm_name)
 
@@ -84,7 +86,9 @@ def azure_changeIP():
             result = exec_command(cmd_start)
             if result.get('status') == 'Succeeded':
                 ip = get_status('ip')
-                print('reboot succeeded ! IP : {}'.format(ip))
+                mail_string = '{} deallocated succeeded ! IP : {}'.format(vm_name, ip)
+                PEZ_MAIL.mail.send_mail(mail_string, 'Azure VM Deallocate')
+                # print('{} reboot succeeded ! IP : {}'.format(vm_name, ip))
             else:
                 print('reboot failed !')
         else:
@@ -96,13 +100,13 @@ def azure_changeIP():
 if __name__ == '__main__':
 
     # Azure account & password
-    az_account = 'xxx@payeasy.com.tw'
-    az_password = 'xxx'
+    az_account = 'XXXXXXX@payeasy.com.tw'
+    az_password = 'XXXXXX'
 
     # Azure resource group & vm name
     resource_group = 'Payeasy_Docker_Services'
     vm_name = 'Docker-Services'
 
-    # azure_changeIP()
-    get_status('ip')
+    azure_changeIP()
+    # get_status('ip')
 
